@@ -1,0 +1,67 @@
+{
+    "name": "C.I.D - Customer Intention Detection",
+    "version": "1.0.0",
+    "manifest_version": 2,
+    "description": "Many things can be done from product reviews. How well can you guess a review's rating from its text alone? What are the most common positive and negative words used in our reviews? Can we detect when things change suddenly? Can we identify seasonal trends? We will try to find out answers to some of these through data mining product reviews data.",
+    "homepage_url": "https://github.com/ppujari/Hackathon2016",
+    "permissions": [
+        "notifications",
+        "storage",
+        "tabs",
+        "http://editorial.prod.cdqarth.prod.walmart.com/",
+        "http://editorial.stg.cdqarth.prod.walmart.com/",
+        "http://editorial.stg1.cdqarth.prod.walmart.com/",
+        "http://editorial.pqa.cdqarth.prod.walmart.com/",
+        "http://172.28.90.191:5000/*"
+    ],
+    "icons": {
+        "16": "icons/tag.png",
+        "48": "icons/tag.png",
+        "128": "icons/tag.png"
+    },
+    "default_locale": "en",
+    "background": {
+        "page": "src/bg/background.html",
+        "persistent": true
+    },
+
+    "page_action": {
+        "default_icon": "icons/tag.png",
+        "default_title": "Fix product tags",
+        "default_popup": "src/page_action/popup.html"
+    },
+
+    "web_accessible_resources": [
+        "fonts/*",
+        "icons/*"
+    ],
+
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.walmart.com/reviews/*"
+            ],
+            "css": [
+                "css/bootstrap.css",
+                "css/font-awesome.css",
+                "css/select2.css",
+                "css/select2-bootstrap.css",
+                "css/cid-review.css"
+            ]
+        },
+        {
+            "matches": [
+                "https://www.walmart.com/reviews/*"
+            ],
+            "js": [
+                "js/jquery-2.0.3.min.js",
+                "js/jquery.js",
+                "js/underscore.js",
+                "js/bootstrap.min.js",
+                "js/select2.min.js",
+                "js/spin.js",
+                "src/inject/ratings.js"
+            ]
+        }
+    ]
+}
