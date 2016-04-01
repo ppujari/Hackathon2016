@@ -1,0 +1,81 @@
+.tag-toolbar {
+    position: absolute;
+    z-index: 100000;
+    bottom: 0;
+    text-align: center;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background: #d3d3d3;
+    font-size: 14px;
+}
+
+.tile-grid-unit .tag-toolbar {
+    visibility: hidden;
+}
+
+.tile-grid-unit.outline .tag-toolbar {
+    visibility: visible;
+}
+
+.tile-grid-unit.outline {
+    outline: 1px dashed #428bca
+}
+
+.accept-btn {
+    margin-left: 0 !important;
+}
+
+.btn-center_ {
+    float: none !important;
+}
+
+.dialog-btn_ {
+    width: 100px;
+    float: none !important;
+}
+
+.select-tag_ {
+    width: 500px;
+}
+
+.note_ {
+    position: absolute;
+    bottom: 80px;
+    left: 14px;
+    right: 14px;
+}
+
+.yes-no-toolbar_ {
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0
+}
+
+.bootstrap .popover {
+    max-width: 800px; /* Max Width of the popover (depending on the container!) */
+}
+
+.bootstrap .btn-toolbar {
+    margin-left: 0;
+}
+
+.bootstrap.select2-drop {
+    font-size: 14px;
+    z-index: 100001;
+}
+
+.bootstrap .select2-close-mask {
+    z-index: 100001;
+}
+
+.bootstrap .fa-spinner.invisible_ {
+    display: none;
+}
+
+.bootstrap .fa-spinner {
+    display: block;
+}
