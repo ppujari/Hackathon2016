@@ -1,16 +1,3 @@
-//define(['js/jquery', 'js/underscore', 'js/backbone'], function ($, _, Backbone) {
-
-
-
-	//var GetRatingsView = Backbone.View.extend({
-	//	el: ".submit-review-form-content",
-
-		/**
-		* Initializes the Ratings API
-		*/
-		//initialize: function () {
-		//	var that = this;
-		//	console.log('initialize');
 var $textAreaEditor;
 var $ratingsStars;
 var $ratingMessage;
@@ -20,10 +7,6 @@ var $submitButton;
 var $reviewRatings;
 var $reviewTitle;
 var currentRatings;
-
-
-
-//},
 
 /**
 * calls an API to get the value of ratings.
@@ -35,10 +18,10 @@ function getRatingNumber(reviewText) {
 	var ratings = {
 		review_text: reviewText,
 	rating : currentRatings
-	}
+	};
 
 	//var urlPost = "http://attribute-extract.stg1.cdqarth.prod.walmart.com/v1/rating/predict/" + JSON.stringify(ratings);
-	var urlPost = "http://172.28.90.191:5000/";
+	var urlPost = "http://172.28.90.191:5000/v1/rating/predict/";
 
 	chrome.extension.sendMessage({
 		type: "POST",
@@ -47,41 +30,24 @@ function getRatingNumber(reviewText) {
 		url: urlPost,
 		data: JSON.stringify(ratings),
 		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: function(data){
-			console.log(data);
-		},
-		failure: function(errMsg) {
-			console.log(errMsg);
-		}
+		dataType: "json"
 	}, function (response) {
-		console.log('response ', response)
+		var data = JSON.parse(response);
+		console.log('response data ', data)
+		currentRatings = parseInt(data.rating);
+		setReviewRatings((currentRatings-1));
 	});
-
-	//$.ajax({
-	//type: "POST",
-	//url: urlPost,
-	//// The key needs to match your method's input parameter (case-sensitive).
-	//data: JSON.stringify(ratings),
-	//contentType: "application/json; charset=utf-8",
-	//dataType: "json",
-	//success: function(data){
-	//	console.log(data);
-	//},
-	//failure: function(errMsg) {
-	//	console.log(errMsg);
-	//}
-	//});
 }
 
 /**
 * Binds the click event on text editor and look for enter and dot.
 */
 function getTextEditorValue() {
-	console.log($textAreaEditor)
+	console.log('$textAreaEditor ', $textAreaEditor);
 	$textAreaEditor.on('keyup', function(e) {
-		console.log('keyup')
+		console.log('keyup');
 		if (e.which === 110 || e.which === 190 || e.which === 13 || (e.which === 8 && $textAreaEditor.val().lenght > 5)) {
+			console.log('$textAreaEditor.val() ', $textAreaEditor.val());
 			getRatingNumber($textAreaEditor.val());
 		} else if (e.which === 8 && $textAreaEditor.val().lenght <= 5) {
 			clearReview();
@@ -94,15 +60,15 @@ function getTextEditorValue() {
  */
 function getRatingMessage(ratingIndex) {
 
-  if (ratingIndex === 1) {
+  if (ratingIndex === 0) {
 	return "Poor";
-  } else if (ratingIndex === 2) {
+  } else if (ratingIndex === 1) {
 	return "Fair";
-  } else if (ratingIndex === 3) {
+  } else if (ratingIndex === 2) {
 	return "Average";
-  } else if (ratingIndex === 4) {
+  } else if (ratingIndex === 3) {
 	return "Good";
-  } else if (ratingIndex === 5) {
+  } else if (ratingIndex === 4) {
 	return "Excellent";
   }
   return "";
@@ -126,9 +92,8 @@ function setRatingMessage(ratingIndex) {
 }
 
 function setRecomendation(ratingIndex) {
-	console.log('ratingIndex ', ratingIndex);
 
-	if (ratingIndex >= 3) {
+	if (ratingIndex >= 2) {
 		//set recommended
 		setRecomendationYes();
 	} else if (ratingIndex === 0 || _.isNaN(ratingIndex)) {
@@ -204,7 +169,6 @@ function observeReviewForm() {
 }
 
 chrome.extension.sendMessage({type: "SHOW_PAGE_ACTION"}, function (response) {
-	//setTimeout(function() {
 		$textAreaEditor = $("#review-body");
 		$ratingsStars = $(".js-rating-selection");
 		$ratingMessage = $(".js-rating-selection-message");
@@ -219,13 +183,7 @@ chrome.extension.sendMessage({type: "SHOW_PAGE_ACTION"}, function (response) {
 
 		disableTemporaryControls();
 		getTextEditorValue();
-	//}, 2000)
 
 	observeReviewForm();
 
 });
-
-	//});
-
-	//return GetRatingsView;
-//});

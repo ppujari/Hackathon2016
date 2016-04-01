@@ -35,8 +35,6 @@ chrome.extension.onMessage.addListener(
             return true;
         }
         else if (request.type === "POST") {
-
-            alert('POST ')
             var xhttp = new XMLHttpRequest();
             var method = request.method ? request.method.toUpperCase() : 'GET';
 
@@ -51,8 +49,7 @@ chrome.extension.onMessage.addListener(
             };
             xhttp.open(method, request.url, true);
             if (method == 'POST') {
-                alert('hi', xhttp.responseText)
-                xhttp.setRequestHeader("Content-Type", "text/xml");
+                xhttp.setRequestHeader('Content-Type', 'application/json');
             }
             xhttp.send(request.data);
             return true; // prevents the callback from being called too early on return

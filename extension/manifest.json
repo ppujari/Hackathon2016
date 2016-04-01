@@ -12,7 +12,6 @@
         "http://editorial.stg.cdqarth.prod.walmart.com/",
         "http://editorial.stg1.cdqarth.prod.walmart.com/",
         "http://editorial.pqa.cdqarth.prod.walmart.com/",
-        "http://attribute-extract.stg1.cdqarth.prod.walmart.com/v1/rating/predict/*",
         "http://172.28.90.191:5000/*"
     ],
     "icons": {
@@ -34,12 +33,7 @@
 
     "web_accessible_resources": [
         "fonts/*",
-        "icons/*",
-        "js/*",
-        "html/*",
-        "src/*",
-        "extension/*",
-        "*"
+        "icons/*"
     ],
 
     "content_scripts": [
@@ -66,8 +60,6 @@
                 "js/bootstrap.min.js",
                 "js/select2.min.js",
                 "js/spin.js",
-                "js/require.js",
-                "js/require-cs.js",
                 "src/inject/ratings.js"
             ]
         }
