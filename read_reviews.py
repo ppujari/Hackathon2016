@@ -5,7 +5,7 @@ def read_reviews(review_file):
     with open(review_file, 'r') as infile:
         for line in infile:
             review_data = json.loads(line)
-            review_text = review_data.get("description")
+            review_text = review_data.get("description").encode("utf8", "ignore")
             item_id = review_data.get("item_id")
             reviews[item_id] = review_text
     return reviews
