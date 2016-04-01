@@ -66,7 +66,7 @@ def extract_titles_rake(reviews):
     rake = Rake("SmartStoplist.txt")
     for item_id, review in reviews.iteritems():
         print "Review: {}".format(review)
-        keyword = extract_title_rake(review, rake)
+         = extract_title_rake(review, rake)
         print keyword
         print "\n"
 

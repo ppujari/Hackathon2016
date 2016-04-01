@@ -2,10 +2,15 @@ __author__ = 'achaud9'
 
 import read_reviews
 
-def extract_sentiment (reviews):
-    for item_id, review in reviews.iteritems():
-        #print item_id, review
+def extract_sentiment (keywords):
+    keywords_with_sentiment = list()
+    for keyword in keywords:
+        data = "text=" + keyword
+        response = requests.post("http://text-processing.com/api/sentiment/", data={data})
+        print keyword
+        print response
+        keywords_with_sentiment.append((keyword, response))
+    return keywords_with_sentiment
 
-if __name__ == "__main__":
-    reviews = read_reviews.read_reviews("reviews_train.txt")
-    extract_sentiment(reviews)
+
+
