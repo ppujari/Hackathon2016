@@ -6,6 +6,7 @@ var $recomendationNo;
 var $submitButton;
 var $reviewRatings;
 var $reviewTitle;
+var $placeHolder;
 var currentRatings;
 
 /**
@@ -17,11 +18,15 @@ function getRatingNumber(reviewText) {
 	//this.setReviewRatings(Math.floor((Math.random() * 5) + 1));
 	var ratings = {
 		review_text: reviewText,
-	rating : currentRatings
+		rating : currentRatings,
+		title: "",
+		probability: 0.0,
+		positive: [],
+		negative: []
 	};
 
-	//var urlPost = "http://attribute-extract.stg1.cdqarth.prod.walmart.com/v1/rating/predict/" + JSON.stringify(ratings);
 	var urlPost = "http://172.28.90.191:5000/v1/rating/predict/";
+	//var urlPost = "http://attribute-extract.pqa.cdqarth.qa.walmart.com/extractors/v1/rating/predict/";
 
 	chrome.extension.sendMessage({
 		type: "POST",
@@ -35,7 +40,7 @@ function getRatingNumber(reviewText) {
 		var data = JSON.parse(response);
 		console.log('response data ', data)
 		currentRatings = parseInt(data.rating);
-		setReviewRatings((currentRatings-1));
+		setReviewRatings((currentRatings-1), data.title);
 	});
 }
 
@@ -74,16 +79,23 @@ function getRatingMessage(ratingIndex) {
   return "";
 }
 
-function setReviewRatings(ratingIndex) {
+function setReviewRatings(ratingIndex, title) {
 
 	clearReview();
 	$ratingsStars.each(function () {
 		$(this).removeClass("rating-unselected").addClass("rating-selected");
+		if (ratingIndex === 0) {
+			$(this).addClass('red_star');
+		}
+		if (ratingIndex === 4) {
+			$(this).addClass('blue_star');
+		}
+
 		return (ratingIndex !== parseInt($(this).attr("data-index")));
 	});
 	setRatingMessage(ratingIndex);
 	setRecomendation(ratingIndex);
-	setReviewTitle(ratingIndex);
+	setReviewTitle(title);
 }
 
 function setRatingMessage(ratingIndex) {
@@ -106,8 +118,12 @@ function setRecomendation(ratingIndex) {
 	}
 }
 
-function setReviewTitle(ratingIndex) {
-	$reviewTitle.val(getRatingMessage(ratingIndex));
+function setReviewTitle(title) {
+	var newTitle = title;
+	if (title === "This Product") {
+		newTitle = title + " is " + $ratingMessage.text();
+	}
+	$reviewTitle.val(newTitle);
 }
 
 function setRecomendationYes() {
@@ -127,19 +143,66 @@ function clearRecomendation() {
 }
 
 function clearReview() {
-	$ratingsStars.removeClass("rating-selected").addClass("rating-unselected");
+	$ratingsStars.removeClass("rating-selected red_star blue_star").addClass("rating-unselected");
 	$ratingMessage.text("");
 	clearRecomendation();
 	$reviewTitle.val("");
 }
 
-function disableTemporaryControls() {
-	$submitButton.addClass("unselectable");
+function defaultActions() {
+	setReviewButton();
+	setPlaceHolder();
+	$submitButton.hide();
 	$reviewRatings.addClass("unselectable");
+	submitReview();
 }
 
-function remove() {
-	remove();
+/**
+ * this will get the average ratings for the current review statistics
+ * @returns {string}
+ */
+
+function getAverageOverallRating() {
+	var text = $(".center").find("script").text();
+	var startIndexText = text.substring(text.indexOf("AverageOverallRating"));
+	var endIndexText = startIndexText.substring(0, startIndexText.indexOf(","));
+	var averageOverallRating = endIndexText.substring(endIndexText.indexOf(":") + 1 );
+
+	return averageOverallRating;
+}
+
+function setReviewFlag() {
+	var reviewFlag = "<div class=\"review-flag\">This review has been flag for admin to re-review</div>";
+	$(".validation-group").append(reviewFlag);
+}
+
+function submitReview() {
+	var averageRating = parseFloat(getAverageOverallRating());
+	var maxThreshold = parseFloat(currentRatings) + 1.5;
+	var minThreshold = parseFloat(currentRatings) - 1.5;
+	$(".js-review-button").on("click", function() {
+		console.log(averageRating >= maxThreshold || averageRating <= minThreshold);
+		console.log(averageRating);
+		console.log(currentRatings);
+		console.log(maxThreshold);
+		if(averageRating >= maxThreshold || averageRating <= minThreshold) {
+			setReviewFlag();
+		}
+	});
+}
+
+function setReviewButton() {
+	var reviewButton = "<button class=\"btn js-review-button display-inline-block\" type=\"button\">Submit</button>"
+
+	$(".js-submit-review").hide();
+	$(".submit-review-submit-controls").html(reviewButton);
+
+}
+
+function setPlaceHolder() {
+	var placeHolder = "<p><img src='" + chrome.extension.getURL("icons/tag.png") +"' style='width:15px'/> Just start typing your review and the review rating and your recommendation decision will automatically be generated!</p>";
+	$placeHolder.html(placeHolder);
+
 }
 
 function observeReviewForm() {
@@ -151,15 +214,16 @@ function observeReviewForm() {
 		$ratingMessage = $(".js-rating-selection-message");
 		$recomendationYes = $("#recommend-friend-yes");
 		$recomendationNo = $("#recommend-friend-no");
-		$submitButton = $(".submit-review-submit-controls");
+		$submitButton = $(".js-review-button");
 		$reviewRatings = $(".submit-review-your-rating");
 		$reviewTitle = $("#review-title");
+		$placeHolder = $(".js-review-body .textarea-placeholder");
 		currentRatings = "0";
 
 		console.log('response received2 ', $("#review-body"))
-
-		disableTemporaryControls();
+		defaultActions();
 		getTextEditorValue();
+
     });
 
     observer.observe(document.querySelector("body"), {
@@ -169,20 +233,21 @@ function observeReviewForm() {
 }
 
 chrome.extension.sendMessage({type: "SHOW_PAGE_ACTION"}, function (response) {
-		$textAreaEditor = $("#review-body");
-		$ratingsStars = $(".js-rating-selection");
-		$ratingMessage = $(".js-rating-selection-message");
-		$recomendationYes = $("#recommend-friend-yes");
-		$recomendationNo = $("#recommend-friend-no");
-		$submitButton = $(".submit-review-submit-controls");
-		$reviewRatings = $(".submit-review-your-rating");
-		$reviewTitle = $("#review-title");
-		currentRatings = "0";
+	$textAreaEditor = $("#review-body");
+	$ratingsStars = $(".js-rating-selection");
+	$ratingMessage = $(".js-rating-selection-message");
+	$recomendationYes = $("#recommend-friend-yes");
+	$recomendationNo = $("#recommend-friend-no");
+	$submitButton = $(".js-review-button");
+	$reviewRatings = $(".submit-review-your-rating");
+	$reviewTitle = $("#review-title");
+	$placeHolder = $(".js-review-body .textarea-placeholder");
+	currentRatings = "0";
 
-		console.log('response received ', $("#review-body"))
+	console.log('response received ', $("#review-body"))
 
-		disableTemporaryControls();
-		getTextEditorValue();
+	defaultActions();
+	getTextEditorValue();
 
 	observeReviewForm();
 

@@ -1,8 +1,8 @@
 {
-    "name": "C.I.D - Customer Intention Detection",
+    "name": "Review Auto-Meter",
     "version": "1.0.0",
     "manifest_version": 2,
-    "description": "Many things can be done from product reviews. How well can you guess a review's rating from its text alone? What are the most common positive and negative words used in our reviews? Can we detect when things change suddenly? Can we identify seasonal trends? We will try to find out answers to some of these through data mining product reviews data.",
+    "description": "Walmart product reviews are immensely useful to the customers as well as the analytics teams. However, writing good reviews is a cumbersome task which is why many products suffer from little or no reviews at all. Our hack aims at bringing a boost to the user engagement in review writing. We present an intelligent interface that can assist the user, as they type, by automatically generating score, title, and meaningful tags. We also show how these auto-generated scores, tags, and titles can help the analytics teams detect various inconsistencies in human-generated reviews.  We can  detect when things change suddenly.  We can identify seasonal trends too.",
     "homepage_url": "https://github.com/ppujari/Hackathon2016",
     "permissions": [
         "notifications",
@@ -12,7 +12,8 @@
         "http://editorial.stg.cdqarth.prod.walmart.com/",
         "http://editorial.stg1.cdqarth.prod.walmart.com/",
         "http://editorial.pqa.cdqarth.prod.walmart.com/",
-        "http://172.28.90.191:5000/*"
+        "http://172.28.90.191:5000/*",
+        "http://attribute-extract.pqa.cdqarth.qa.walmart.com/extractors/v1/rating/predict/"
     ],
     "icons": {
         "16": "icons/tag.png",
@@ -54,11 +55,9 @@
                 "https://www.walmart.com/reviews/*"
             ],
             "js": [
-                "js/jquery-2.0.3.min.js",
                 "js/jquery.js",
                 "js/underscore.js",
                 "js/bootstrap.min.js",
-                "js/select2.min.js",
                 "js/spin.js",
                 "src/inject/ratings.js"
             ]

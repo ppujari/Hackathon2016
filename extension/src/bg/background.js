@@ -1,26 +1,3 @@
-/**
- * Default editorial server for tagging and everything.
- *
- * @type {{url: string, env: string}}
- */
-//const DEFAULT_SERVER = {
-//    url: "http://editorial.prod.cdqarth.prod.walmart.com",
-//    env: "PROD"
-//};
-
-//var tabUrl;
-
-//function saveServerSettings(settings, callback) {
-//    chrome.storage.sync.set({server: settings}, callback);
-//}
-//
-//function getServerSettings(callback) {
-//    chrome.storage.sync.get("server", function (items) {
-//        callback(items.server || DEFAULT_SERVER);
-//    });
-//}
-
-
 chrome.extension.onMessage.addListener(
     function (request, sender, sendResponse) {
 
