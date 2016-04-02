@@ -59,11 +59,18 @@ function displayProbabilityPopup(probability) {
                 " We kindly suggest adding more detail to increase the accuracy of the automatic rating generator!"+
                 "</div>";
     }
+
     if ($('.submit-review-your-review #popup').length === 0) {
         $('.submit-review-your-review').prepend('<div id="popup"></div>');
     }
 
-    if (probability < 0.7) {
+    if ($('#prob-score').length) {
+        $('#prob-score').remove();
+    }
+
+    $('.submit-review-your-rating').find('.Grid-col').last().append('<small id="prob-score">probability score = ' + (probability * 100) + '%</small>');
+
+    if (probability < 0.5) {
         console.log('prob ', probability)
         $('.submit-review-your-review').addClass('bootstrap');
         $('#popup').popover({
@@ -71,7 +78,7 @@ function displayProbabilityPopup(probability) {
             html: true,
             placement: "left",
             trigger: "manual",
-            title: "Confidence"
+            title: "Low probability score of " + (probability * 100) + "%"
         });
 
         $('#popup').popover('show');
@@ -91,7 +98,7 @@ function toggleSpinner(forceOff) {
     } else {
         if (spinning === false) {
             $('.js-rating-selection-message').hide();
-            $('.submit-review-ratings').append('<i class="fa fa-spinner fa-spin" style="margin-left:15px;font-size:40px; color:#6181FC;"></i>');
+            $('.submit-review-ratings').append('<i class="fa fa-spinner fa-spin" style="margin-left:15px;font-size:42px; color:#6181FC;"></i>');
             spinning = true;
         }
     }
@@ -107,6 +114,8 @@ function getTextEditorValue() {
         if ($textAreaEditor.val() === "") {
             toggleSpinner(true);
             $('#popup').popover('hide');
+            setReviewTitle("Review title");
+            $('#prob-score').remove();
         } else {
            toggleSpinner();
         }
@@ -233,6 +242,9 @@ function getAverageOverallRating() {
 function setReviewFlag() {
 	var reviewFlag = "<div class=\"review-flag\">This review has been flag for admin to re-review</div>";
 	$(".validation-group").append(reviewFlag);
+    setInterval(function () {
+        $('.review-flag').remove();
+    }, 3000)
 }
 
 function submitReview() {
