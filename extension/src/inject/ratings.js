@@ -8,6 +8,7 @@ var $reviewRatings;
 var $reviewTitle;
 var $placeHolder;
 var currentRatings;
+var spinning = false;
 
 /**
 * calls an API to get the value of ratings.
@@ -38,10 +39,62 @@ function getRatingNumber(reviewText) {
 		dataType: "json"
 	}, function (response) {
 		var data = JSON.parse(response);
-		console.log('response data ', data)
+		console.log('response data ', data);
 		currentRatings = parseInt(data.rating);
 		setReviewRatings((currentRatings-1), data.title);
+        displayProbabilityPopup(data.probability);
+        toggleSpinner(true);
 	});
+}
+
+/**
+* Displays a popup message if probability drops below .70
+*/
+function displayProbabilityPopup(probability) {
+
+    function popupContent() {
+
+        return "<div style=''>" +
+                "<img src='" + chrome.extension.getURL("icons/tag.png") +"' style='width:15px'/>" +
+                " We kindly suggest adding more detail to increase the accuracy of the automatic rating generator!"+
+                "</div>";
+    }
+    if ($('.submit-review-your-review #popup').length === 0) {
+        $('.submit-review-your-review').prepend('<div id="popup"></div>');
+    }
+
+    if (probability < 0.7) {
+        console.log('prob ', probability)
+        $('.submit-review-your-review').addClass('bootstrap');
+        $('#popup').popover({
+            content: popupContent,
+            html: true,
+            placement: "left",
+            trigger: "manual",
+            title: "Confidence"
+        });
+
+        $('#popup').popover('show');
+    } else {
+        $('#popup').popover('hide');
+    }
+}
+
+/**
+* Toggles the spinner when user is typing. Spinner disappears when server has sent a rating.
+*/
+function toggleSpinner(forceOff) {
+    if (forceOff) {
+        $('.submit-review-ratings .fa-spinner').remove();
+        $('.js-rating-selection-message').show();
+        spinning = false;
+    } else {
+        if (spinning === false) {
+            $('.js-rating-selection-message').hide();
+            $('.submit-review-ratings').append('<i class="fa fa-spinner fa-spin" style="margin-left:15px;font-size:40px; color:#6181FC;"></i>');
+            spinning = true;
+        }
+    }
 }
 
 /**
@@ -51,6 +104,12 @@ function getTextEditorValue() {
 	console.log('$textAreaEditor ', $textAreaEditor);
 	$textAreaEditor.on('keyup', function(e) {
 		console.log('keyup');
+        if ($textAreaEditor.val() === "") {
+            toggleSpinner(true);
+            $('#popup').popover('hide');
+        } else {
+           toggleSpinner();
+        }
 		if (e.which === 110 || e.which === 190 || e.which === 13 || (e.which === 8 && $textAreaEditor.val().lenght > 5)) {
 			console.log('$textAreaEditor.val() ', $textAreaEditor.val());
 			getRatingNumber($textAreaEditor.val());
