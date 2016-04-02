@@ -25,8 +25,8 @@ function getRatingNumber(reviewText) {
 		negative: []
 	};
 
-	var urlPost = "http://172.28.90.191:5000/v1/rating/predict/";
-	//var urlPost = "http://attribute-extract.pqa.cdqarth.qa.walmart.com/extractors/v1/rating/predict/";
+	//var urlPost = "http://172.28.90.191:5000/v1/rating/predict/";
+	var urlPost = "http://attribute-extract.pqa.cdqarth.qa.walmart.com/extractors/v1/rating/predict/";
 
 	chrome.extension.sendMessage({
 		type: "POST",
