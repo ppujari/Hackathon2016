@@ -185,7 +185,7 @@ function submitReview() {
 		console.log(averageRating);
 		console.log(currentRatings);
 		console.log(maxThreshold);
-		if(averageRating >= maxThreshold || averageRating <= minThreshold) {
+		if(averageRating && (averageRating >= maxThreshold || averageRating <= minThreshold)) {
 			setReviewFlag();
 		}
 	});
