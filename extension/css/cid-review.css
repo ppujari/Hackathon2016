@@ -7,3 +7,13 @@
   user-select: none;
   pointer-events: none;
 }
+
+.red_star {
+  -webkit-filter: hue-rotate(310deg);
+  filter: hue-rotate(310deg);
+}
+
+.blue_star {
+  -webkit-filter: hue-rotate(170deg);
+  filter: hue-rotate(170deg);
+}
