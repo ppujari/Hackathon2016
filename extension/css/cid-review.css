@@ -14,8 +14,8 @@
 }
 
 .blue_star {
-  -webkit-filter: hue-rotate(170deg);
-  filter: hue-rotate(170deg);
+  -webkit-filter: hue-rotate(90deg);
+  filter: hue-rotate(90deg);
 }
 
 .review-flag {

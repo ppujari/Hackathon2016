@@ -176,7 +176,7 @@ function setRecomendation(ratingIndex) {
 	if (ratingIndex >= 2) {
 		//set recommended
 		setRecomendationYes();
-	} else if (ratingIndex === 0 || _.isNaN(ratingIndex)) {
+	} else if (ratingIndex === -1 || _.isNaN(ratingIndex)) {
 		//set clear both input
 		clearRecomendation();
 
@@ -244,22 +244,19 @@ function setReviewFlag() {
 	$(".validation-group").append(reviewFlag);
     setInterval(function () {
         $('.review-flag').remove();
-    }, 3000)
+    }, 8000)
 }
 
 function submitReview() {
-	var averageRating = parseFloat(getAverageOverallRating());
-	var maxThreshold = parseFloat(currentRatings) + 1.5;
-	var minThreshold = parseFloat(currentRatings) - 1.5;
 	$(".js-review-button").on("click", function() {
-		console.log(averageRating >= maxThreshold || averageRating <= minThreshold);
-		console.log(averageRating);
-		console.log(currentRatings);
-		console.log(maxThreshold);
-		if(averageRating && (averageRating >= maxThreshold || averageRating <= minThreshold)) {
-			setReviewFlag();
-		}
-	});
+        var averageRating = parseFloat(getAverageOverallRating());
+        var floatCurrentRating = parseFloat(currentRatings);
+        var maxThreshold = (averageRating + 1.5) >= 5.0 ? 5.0 : averageRating + 1.5;
+        var minThreshold = (averageRating - 1.5) <= 0.0 ? 0.0 : averageRating - 1.5;
+        if(averageRating && (floatCurrentRating >= maxThreshold || floatCurrentRating <= minThreshold)) {
+            setReviewFlag();
+        }
+    });
 }
 
 function setReviewButton() {
