@@ -42,7 +42,7 @@ function getRatingNumber(reviewText) {
 		console.log('response data ', data);
 		currentRatings = parseInt(data.rating);
 		setReviewRatings((currentRatings-1), data.title);
-        displayProbabilityPopup(data.probability);
+        displayProbabilityPopup(+data.probability.toFixed(2));
         toggleSpinner(true);
 	});
 }
