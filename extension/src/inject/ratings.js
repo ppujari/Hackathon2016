@@ -78,7 +78,7 @@ function displayProbabilityPopup(probability) {
             html: true,
             placement: "left",
             trigger: "manual",
-            title: "Low probability score of " + (probability * 100) + "%"
+            title: "Low probability score"
         });
 
         $('#popup').popover('show');
