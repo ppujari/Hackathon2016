@@ -116,6 +116,7 @@ function getTextEditorValue() {
             $('#popup').popover('hide');
             setReviewTitle("Review title");
             $('#prob-score').remove();
+            clearReview();
         } else {
            toggleSpinner();
         }
