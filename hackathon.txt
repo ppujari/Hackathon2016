@@ -1,0 +1,43 @@
+
+!connect jdbc:drill:zk=local
+
+sqlline:
+  select count(*) from dfs.`C:\work\output20140803\AllAcxId0804.csv`;
+  SELECT * FROM dfs.`C:\work\output20140803\AllAcxId0804.csv` LIMIT 10;
+
+
+http://localhost:8047/query
+
+
+select count(*) from dfs.`C:\work\output20140803\AllAcxId0804.csv`
+
+SELECT count(*) FROM dfs.`C:\drill\data\Impression_log.tsv`
+
+SELECT columns[0] as cookie_id, columns[1] as ash_id FROM dfs.`C:\drill\data\AllAcxId.tsv` LIMIT 10
+
+SELECT columns[0] as cookie_id, columns[1] as ash_id FROM dfs.`C:\drill\data\Impression_log.tsv` LIMIT 20
+
+
+
+SELECT a.columns[0] as cookie_id, a.columns[1] as ash_id 
+ FROM dfs.`C:\drill\data\AllAcxId.tsv` a,dfs.`C:\drill\data\test1.tsv` b 
+where  a.columns[0] = b.columns[0]  LIMIT 50
+
+
+SELECT a.columns[0] as cookie_id, a.columns[1] as ash_id FROM dfs.`C:\drill\data\AllAcxId.tsv` a
+UNION all
+SELECT b.columns[0] as cookie_id, b.columns[1] as ash_id from dfs.`C:\drill\data\Impression_log.tsv` b
+limit 10
+
+
+----------------------------------------------------THE END------------------------------------------------------
+SELECT * FROM dfs.`C:\drill\apache-drill-0.7.0-incubating-SNAPSHOT\sample-data\region.parquet`;
+
+
+https://cwiki.apache.org/confluence/display/DRILL/Using+JDBC+to+Access+Apache+Drill+from+SQuirreL
+
+SELECT * FROM dfs.`C:\drill\apache-drill-0.7.0-incubating-SNAPSHOT\sample-data\nation.parquet`;
+
+create or replace view logview as select cast(columns[0] as VARCHAR(40)) as cookie_id,
+cast(columns[1] as VARCHAR(256)) as ash_id from dfs.`C:\drill\data\Impression_log.tsv` b;
+
