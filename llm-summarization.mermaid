@@ -1,0 +1,52 @@
+graph TB
+    subgraph "Input Phase"
+        A[Long Text Document] --> B[Chunking Module]
+        B --> C1[Chunk 1]
+        B --> C2[Chunk 2]
+        B --> C3[Chunk n...]
+    end
+
+    subgraph "Processing Phase"
+        C1 --> D1[Local Summary]
+        C2 --> D2[Local Summary]
+        C3 --> D3[Local Summary]
+        
+        D1 --> E[Hierarchical Combination]
+        D2 --> E
+        D3 --> E
+    end
+
+    subgraph "Quality Control"
+        E --> F[Consistency Checker]
+        F --> G[Fact Verification]
+        G --> H[Final Summary]
+    end
+
+    subgraph "Challenges"
+        CH1[Context Window Limits]
+        CH2[Information Loss]
+        CH3[Consistency Issues]
+        CH4[Factual Accuracy]
+    end
+
+    subgraph "Solutions"
+        S1[Overlapping Chunks]
+        S2[Entity Tracking]
+        S3[Two-Stage Architecture]
+        S4[Source Attribution]
+    end
+
+    CH1 --> S1
+    CH2 --> S2
+    CH3 --> S3
+    CH4 --> S4
+
+    style CH1 fill:#ff9999
+    style CH2 fill:#ff9999
+    style CH3 fill:#ff9999
+    style CH4 fill:#ff9999
+    
+    style S1 fill:#99ff99
+    style S2 fill:#99ff99
+    style S3 fill:#99ff99
+    style S4 fill:#99ff99
